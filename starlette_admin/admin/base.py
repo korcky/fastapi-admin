@@ -47,7 +47,7 @@ class BaseAdmin:
     site: AdminSite
 
     @classmethod
-    def get_context(cls, request):
+    async def get_context(cls, request):
         context = cls.site.get_context(request)
         context.update(
             {
@@ -61,7 +61,7 @@ class BaseAdmin:
         return context
 
     @classmethod
-    def get_list_objects(cls, request):
+    async def get_list_objects(cls, request):
         """
         Return the list of objects to render in the list view.
 
@@ -84,7 +84,7 @@ class BaseAdmin:
         raise NotImplementedError()
 
     @classmethod
-    def get_object(cls, request):
+    async def get_object(cls, request):
         raise NotImplementedError()
 
     @classmethod
@@ -100,7 +100,7 @@ class BaseAdmin:
         raise NotImplementedError()
 
     @classmethod
-    def paginate(cls, request, objects):
+    async def paginate(cls, request, objects):
         paginator = cls.paginator_class(objects, cls.paginate_by)
         page_number = request.query_params.get("page")
 
@@ -124,7 +124,7 @@ class BaseAdmin:
         if not has_required_scope(request, cls.permission_scopes):
             raise HTTPException(403)
 
-        context = cls.get_context(request)
+        context = await cls.get_context(request)
         context.update(
             {
                 "list_field_names": cls.list_field_names,
@@ -136,10 +136,10 @@ class BaseAdmin:
             }
         )
 
-        list_objects = cls.get_list_objects(request)
+        list_objects = await cls.get_list_objects(request)
 
         if cls.paginate_by:
-            paginator, page, list_objects, is_paginated = cls.paginate(
+            paginator, page, list_objects, is_paginated = await cls.paginate(
                 request, list_objects
             )
             context.update(
@@ -170,7 +170,7 @@ class BaseAdmin:
         if not cls.create_form:
             raise MissingFormError()
 
-        context = cls.get_context(request)
+        context = await cls.get_context(request)
 
         if request.method == "GET":
             form = cls.get_form(cls.create_form)
@@ -200,8 +200,8 @@ class BaseAdmin:
         if not cls.update_form:
             raise MissingFormError()
 
-        instance = cls.get_object(request)
-        context = cls.get_context(request)
+        instance = await cls.get_object(request)
+        context = await cls.get_context(request)
         form_kwargs = {
             "form_cls": cls.update_form,
             "data": instance if isinstance(instance, dict) else None,
@@ -236,8 +236,8 @@ class BaseAdmin:
         if not cls.delete_form:
             raise MissingFormError()
 
-        instance = cls.get_object(request)
-        context = cls.get_context(request)
+        instance = await cls.get_object(request)
+        context = await cls.get_context(request)
         form_kwargs = {
             "form_cls": cls.delete_form,
             "data": instance if isinstance(instance, dict) else None,
