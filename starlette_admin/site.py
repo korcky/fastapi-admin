@@ -85,8 +85,11 @@ class AdminSite(Router):
     def base_url_name(self) -> str:
         return f"{self.name}:base"
 
+    async def has_required_scope(self, request):
+        return has_required_scope(request, self.permission_scopes)
+
     async def root(self, request):
-        if not has_required_scope(request, self.permission_scopes):
+        if not await self.has_required_scope(request):
             raise HTTPException(403)
 
         context = self.get_context(request)

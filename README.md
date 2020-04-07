@@ -9,6 +9,7 @@
 
 **TODO**:
 
+* [ ] Move to fastapi
 * [ ] Make more functions async
 * [ ] Move to [pydantic](https://github.com/samuelcolvin/pydantic/)?
 
