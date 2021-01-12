@@ -54,7 +54,7 @@ package_name = "starlette_admin"
 setup(
     name=name,
     python_requires=">=3.7",
-    version=get_version(package_name),
+    version="0.0.1.b1",
     url="https://github.com/accent-starlette/starlette-admin",
     license="MIT",
     description="Starlette Admin Site.",
