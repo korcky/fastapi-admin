@@ -55,7 +55,7 @@ setup(
     name=name,
     python_requires=">=3.7",
     version="0.0.1.b1",
-    url="https://github.com/accent-starlette/starlette-admin",
+    url="https://github.com/korcky/fastapi-admin",
     license="MIT",
     description="Starlette Admin Site.",
     long_description=get_long_description(),
